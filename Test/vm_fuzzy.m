@@ -1,4 +1,4 @@
-function [h1,h2,t,u,e] = vm_pid(a,N,dT,v, kp, Ti, Td)
+function [h1,h2,t,u,e] = vm_fuzzy(a,N,dT)
 % Läser in stegsvaret på vattenmodellen (nivå h1 och h2) och reglerar nivån
 % i första behållaren med hjälp av en P-regulator
 
@@ -14,10 +14,6 @@ function [h1,h2,t,u,e] = vm_pid(a,N,dT,v, kp, Ti, Td)
 % N: antal sampling
 % dT: samplingstiden i sek.
 % v: värden för pumpstyrningen som ska hållas konstant, stegets höjd
-% kp: förstärkning k för pi-reglering
-% Ti: Integrationsdelen "I" i PI
-% Td: Deriveringsdelen "D" i PID
-
 
 % DEL B: Arduino-mapping i Ctrl-boxen
 % interna motorparameter och analoga ingångar
@@ -49,8 +45,6 @@ ok=0; %används för att upptäcka för korta samplingstider
 
 % DEL E: starta stegsvarsexperimentet
   
-
-errorsum=0;
   
   for i=1:N %slinga kommer att köras N-gångar, varje gång tar exakt Ts-sekunder
     
@@ -65,15 +59,11 @@ errorsum=0;
     h2(i)= a.analogRead(Ai2); % mät nivån i behållaren 2 
     
     t(i)= i; %numrerar samples i tidsvektor
-    
-    e(i)= v-h2(i); %räknar ut felvärdet som differens mellan ärvärdet och börvärdet
-    errorsum= (e(i)+errorsum);
    
     % REGULATORN
 if (e(i) > 0 && i>1)
  
-	u(i)=kp*(e(i) + Td * ((e(i)-e(i-1))/dT) + (errorsum * (dT/Ti))); %pumpen kan styras med värden mellan 0..255
- 
+ u(i)=evalfis(h1(i), vm_F);
   
 else
     
