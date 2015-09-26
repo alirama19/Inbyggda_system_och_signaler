@@ -44,9 +44,9 @@ ok=0; %används för att upptäcka för korta samplingstider
 
 
 % DEL E: starta stegsvarsexperimentet
-  
-  
-  for i=1:N %slinga kommer att köras N-gångar, varje gång tar exakt Ts-sekunder
+
+
+for i=1:N %slinga kommer att köras N-gångar, varje gång tar exakt Ts-sekunder
     
     start = cputime; %startar en timer för att kunna mäta tiden för en loop
     if ok <0 %testar om samplingen är för kort
@@ -56,47 +56,39 @@ ok=0; %används för att upptäcka för korta samplingstider
     end
     
     h1(i)= a.analogRead(Ai1); % mät nivån i behållaren 1
-    h2(i)= a.analogRead(Ai2); % mät nivån i behållaren 2 
+    h2(i)= a.analogRead(Ai2); % mät nivån i behållaren 2
     
     t(i)= i; %numrerar samples i tidsvektor
-   
-    % REGULATORN
-if (e(i) > 0 && i>1)
- 
- u(i)=evalfis(h1(i), vm_F);
-  
-else
     
-	u(i) =0;
-
-end
+    e(i)= v-h1(i); %r?knar ut felv?rdet som differens mellan ?rv?rdet och b?rv?rdet
+    
+    % REGULATORN
+    u(i)=evalfis(h1(i), vm_F);
     u(i)=min(255, round(u(i)));
-
     
     %online-plot
     plot(t,h1,'k-',t,h2,'r--',t,u,'m:', t,e,'b--');
-    
     
     elapsed=cputime-start; %räknar åtgången tid i sekunder
     ok=(dT-elapsed); % sparar tidsmarginalen i ok
     
     pause(ok); %pausar resterande samplingstid
     
-   	% Skriva till utgången
-a.analogWrite(PWMA, u(i));
+    % Skriva till utgången
+    a.analogWrite(PWMA, u(i));
+    
+    
+end % -for
 
-
-  end % -for
-  
-  % experimentet är färdig
+% experimentet är färdig
 
 % DEL F: avsluta experimentet
-  a.analogWrite(PWMA,0); % stäng av pumpen
-  % plotta en fin slutbild, 
-  plot(t,h1,'k-',t,h2,'r--',t,u,'m:', t,e,'b');
-  xlabel('samples k')
-  ylabel('nivån h1, h2, steg u, error e')
-  title('PID vattenmodell')
-  legend('h1 ', 'h2 ', 'u ', 'e')
+a.analogWrite(PWMA,0); % stäng av pumpen
+% plotta en fin slutbild,
+plot(t,h1,'k-',t,h2,'r--',t,u,'m:', t,e,'b');
+xlabel('samples k')
+ylabel('nivån h1, h2, steg u, error e')
+title('PID vattenmodell')
+legend('h1 ', 'h2 ', 'u ', 'e')
 
 end
