@@ -23,6 +23,7 @@ Ai1dp=19; % digital pin for analog in 1
 Ai2dp=16; % digital pin for analog in 2
 Ai1=5; % anslutning analog in 1, Ai1-10V, värdet: 0..20cm <==> 0 .. 1024
 Ai2=2; % anslutning analog in 2, Ai2-10V, värdet: 0..20cm <==> 0 .. 1024
+fis = readfis('vm_F');
 
 % DEL C: Initialisering av in- och utgångar på Ctrl-Boxen
 a.pinMode(DirA,'output');
@@ -37,10 +38,11 @@ a.pinMode(Ai2dp,'input');
 % skapa vektorer för att spara mätvärden under experimentet, genom att fylla en vektor med N-nullor
 h1 = zeros(1, N); %vektor med N nullor på en (1) rad som ska fyllas med mätningar av nivån i vattentank 1
 h2 = zeros(1, N); %vektor med N nullor på en (1) rad som ska fyllas med mätningar av nivån i vattentank 2
-u = v*ones(N); %vektor för stegsvaret med N värden som alla är lika stor som "v"
+u =evalfis(h1,fis);  %vektor för stegsvaret med N värden som alla är lika stor som "v"
 t = zeros(1, N); %vektor för tiden som en numrering av tidspunkter från 1 till N
 e = zeros(1, N);% vektor för felvärde
 ok=0; %används för att upptäcka för korta samplingstider
+length(u)
 
 
 % DEL E: starta stegsvarsexperimentet
@@ -63,7 +65,7 @@ for i=1:N %slinga kommer att köras N-gångar, varje gång tar exakt Ts-sekunder
     e(i)= v-h1(i); %r?knar ut felv?rdet som differens mellan ?rv?rdet och b?rv?rdet
     
     % REGULATORN
-    u(i)=evalfis(h1(i), vm_F);
+    u(i)=evalfis(h1(i), fis);
     u(i)=min(255, round(u(i)));
     
     %online-plot
@@ -79,7 +81,7 @@ for i=1:N %slinga kommer att köras N-gångar, varje gång tar exakt Ts-sekunder
     
     
 end % -for
-
+ruleview(fis);
 % experimentet är färdig
 
 % DEL F: avsluta experimentet
@@ -88,7 +90,7 @@ a.analogWrite(PWMA,0); % stäng av pumpen
 plot(t,h1,'k-',t,h2,'r--',t,u,'m:', t,e,'b');
 xlabel('samples k')
 ylabel('nivån h1, h2, steg u, error e')
-title('PID vattenmodell')
+title('Fuzzy reglering vattenmodell')
 legend('h1 ', 'h2 ', 'u ', 'e')
 
 end

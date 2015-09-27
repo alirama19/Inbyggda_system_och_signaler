@@ -92,7 +92,7 @@ end
     
     pause(ok); %pausar resterande samplingstid
     
-   	% Skriva till utgången
+ 
 a.analogWrite(PWMA, u(i));
 
 
