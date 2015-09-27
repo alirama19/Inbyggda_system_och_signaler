@@ -66,7 +66,7 @@ errorsum=0;
     
     t(i)= i; %numrerar samples i tidsvektor
     
-    e(i)= v-h2(i); %räknar ut felvärdet som differens mellan ärvärdet och börvärdet
+    e(i)= v-h1(i); %räknar ut felvärdet som differens mellan ärvärdet och börvärdet
     errorsum= (e(i)+errorsum);
    
     % REGULATORN

@@ -1,4 +1,4 @@
-function [h1,h2,t,u,e] = vm_fuzzy(a,N,dT)
+function [h1,h2,t,u,e] = vm_fuzzy(a,N,dT,v)
 % Läser in stegsvaret på vattenmodellen (nivå h1 och h2) och reglerar nivån
 % i första behållaren med hjälp av en P-regulator
 
