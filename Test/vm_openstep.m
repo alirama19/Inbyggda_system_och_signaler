@@ -77,8 +77,9 @@ ok=0; %används för att upptäcka för korta samplingstider
   plot(t,h1,'k-',t,h2,'r--',t,u,'m:');
   xlabel('samples k')
   ylabel('nivån h1, h2, steg u')
-  title('öppet stegsvar vattenmodel')
+  title('Open Step')
   legend('h1 ', 'h2 ', 'u ')
 
+  
 end
 
