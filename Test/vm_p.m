@@ -96,9 +96,9 @@ a.analogWrite(PWMA, u(i));
   % plotta en fin slutbild, 
   plot(t,h1,'k-',t,h2,'r--',t,u,'m:');
   xlabel('samples k')
-  ylabel('nivån h1, h2, steg u, error e')
-  title('tvåstegsvar vattenmodell')
-  legend('h1 ', 'h2 ', 'u ', 'e')
+  ylabel('Nivån i vattentank h1, h2, stegsvar u och felvärde e')
+  title('P-reglering-del_2')
+  legend('h1', 'h2', 'u ', 'e')
 
 end
 
