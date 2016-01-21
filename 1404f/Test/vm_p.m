@@ -94,7 +94,7 @@ a.analogWrite(PWMA, u(i));
 % DEL F: avsluta experimentet
   a.analogWrite(PWMA,0); % stäng av pumpen
   % plotta en fin slutbild, 
-  plot(t,h1,'k-',t,h2,'r--',t,u,'m:');
+  plot(t,h1,'k-',t,h2,'r--',t,u,'m:',t,e,'b');
   xlabel('samples k')
   ylabel('Nivån i vattentank h1, h2, stegsvar u och felvärde e')
   title('P-reglering-del_2')
